@@ -1,57 +1,59 @@
 import java.util.*;
 
 public class Solution {
-    public int colorTheGrid(int m, int n) {
-        int MOD = 1_000_000_007;
-        int maxState = (int) Math.pow(3, m);
+    private static final int MOD = 1_000_000_007;
 
-        // Step 1: Generate all valid column states
+    public int colorTheGrid(int m, int n) {
+        // Generate valid states and their color sequences
         List<Integer> validStates = new ArrayList<>();
-        for (int state = 0; state < maxState; state++) {
+        List<int[]> colorSequences = new ArrayList<>();
+        for (int state = 0; state < (int) Math.pow(3, m); state++) {
             if (isValid(state, m)) {
                 validStates.add(state);
+                colorSequences.add(getColors(state, m));
             }
         }
+        int k = validStates.size();
+        if (k == 0 || n == 1) return k;
 
-        // Step 2: Precompute compatible state transitions
-        Map<Integer, List<Integer>> compatible = new HashMap<>();
-        for (int s1 : validStates) {
-            compatible.put(s1, new ArrayList<>());
-            for (int s2 : validStates) {
-                if (areCompatible(s1, s2, m)) {
-                    compatible.get(s1).add(s2);
+        // Precompute compatible state indices
+        List<Integer>[] transitions = new List[k];
+        for (int i = 0; i < k; i++) {
+            transitions[i] = new ArrayList<>();
+            int[] c1 = colorSequences.get(i);
+            for (int j = 0; j < k; j++) {
+                if (isCompatible(c1, colorSequences.get(j))) {
+                    transitions[i].add(j);
                 }
             }
         }
 
-        // Step 3: DP initialization
-        Map<Integer, Integer> dp = new HashMap<>();
-        for (int state : validStates) {
-            dp.put(state, 1);
-        }
-
-        // Step 4: DP over columns
+        // Array-based DP
+        int[] dp = new int[k];
+        Arrays.fill(dp, 1);
+        
         for (int col = 1; col < n; col++) {
-            Map<Integer, Integer> nextDp = new HashMap<>();
-            for (int curr : validStates) {
-                int ways = 0;
-                for (int prev : compatible.get(curr)) {
-                    ways = (ways + dp.get(prev)) % MOD;
+            int[] next = new int[k];
+            for (int i = 0; i < k; i++) {
+                long sum = 0;
+                for (int j : transitions[i]) {
+                    sum += dp[j];
+                    if (sum >= MOD) sum -= MOD;
                 }
-                nextDp.put(curr, ways);
+                next[i] = (int) sum;
             }
-            dp = nextDp;
+            dp = next;
         }
 
-        // Step 5: Sum all ways for the last column
-        int result = 0;
-        for (int ways : dp.values()) {
-            result = (result + ways) % MOD;
+        // Calculate final result
+        long total = 0;
+        for (int val : dp) {
+            total = (total + val) % MOD;
         }
-        return result;
+        return (int) total;
     }
 
-    // Check if a column state is valid (no two adjacent cells have the same color)
+    // Check column validity
     private boolean isValid(int state, int m) {
         int prev = -1;
         for (int i = 0; i < m; i++) {
@@ -63,12 +65,19 @@ public class Solution {
         return true;
     }
 
-    // Check if two column states are compatible (no same color in the same row)
-    private boolean areCompatible(int s1, int s2, int m) {
-        for (int i = 0; i < m; i++) {
-            if ((s1 % 3) == (s2 % 3)) return false;
-            s1 /= 3;
-            s2 /= 3;
+    // Get color sequence for a state
+    private int[] getColors(int state, int m) {
+        int[] colors = new int[m];
+        for (int i = 0; state > 0; i++, state /= 3) {
+            colors[i] = state % 3;
+        }
+        return colors;
+    }
+
+    // Check row compatibility
+    private boolean isCompatible(int[] a, int[] b) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == b[i]) return false;
         }
         return true;
     }
