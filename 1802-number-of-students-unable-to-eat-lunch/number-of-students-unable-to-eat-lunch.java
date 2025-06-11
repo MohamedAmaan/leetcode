@@ -5,7 +5,6 @@ class Solution {
         for (int s : students) {
             queue.offer(s);  // sab students queue mein add
         }
-
         int index = 0;  // sandwich pointer
         int attempts = 0;  // consecutive failed attempts
 
@@ -18,13 +17,11 @@ class Solution {
                 queue.offer(queue.poll());  // student end mein chala jaata hai
                 attempts++;
             }
-
             // Agar sab students ek round mein reject kar rahe hain
             if (attempts == queue.size()) {
                 break;
             }
         }
-
         return queue.size();  // jitne students bache, wo nahi kha paaye
     }
 }
