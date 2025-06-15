@@ -1,4 +1,4 @@
-<h2><a href="https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer">Max Difference You Can Get From Changing an Integer</a></h2> <img src='https://img.shields.io/badge/Difficulty-Medium-orange' alt='Difficulty: Medium' /><hr><p>You are given an integer <code>num</code>. You will apply the following steps to <code>nums</code> <strong>two</strong> times <strong>independently</strong>:</p>
+<h2><a href="https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer">Max Difference You Can Get From Changing an Integer</a></h2> <img src='https://img.shields.io/badge/Difficulty-Medium-orange' alt='Difficulty: Medium' /><hr><p>You are given an integer <code>num</code>. You will apply the following steps to <code>num</code> <strong>two</strong> separate times:</p>
 
 <ul>
 	<li>Pick a digit <code>x (0 &lt;= x &lt;= 9)</code>.</li>
@@ -10,7 +10,7 @@
 
 <p>Return <em>the max difference</em> between <code>a</code> and <code>b</code>.</p>
 
-<p>Note that the new integer (either <code>a</code> or <code>b</code>) <strong>must not</strong> have any leading zeros, and it <strong>must not</strong> be 0.</p>
+<p>Note that neither <code>a</code> nor <code>b</code> may have any leading zeros, and <strong>must not</strong> be 0.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
